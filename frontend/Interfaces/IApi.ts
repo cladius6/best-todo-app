@@ -1,4 +1,4 @@
-import { ITasksList } from './ITask';
+import { ITasksList } from './ITodo';
 
 export interface IApi {
   getTasksList(): Promise<IGetTasksListResponse>;
