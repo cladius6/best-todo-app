@@ -4,10 +4,10 @@ export enum TasksType {
   Uncompleted = 'UNCOMPLETED',
 }
 
-export type ITasksList = ITask[];
-export interface ITask {
+export type ITasksList = ITodo[];
+export interface ITodo {
   id: number;
   title: string;
   description?: string;
-  completed: boolean;
+  status: boolean;
 }

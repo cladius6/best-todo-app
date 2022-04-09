@@ -1,4 +1,4 @@
-import { ITasksList, ITask, TasksType } from './../Interfaces/ITask';
+import { ITasksList, ITodo, TasksType } from '../Interfaces/ITodo';
 import { IApi, IGetTasksListResponse } from './../Interfaces/IApi';
 import type { NextPage } from 'next';
 import { ChangeEvent, useState } from 'react';
@@ -10,19 +10,19 @@ const exampleResponse: IGetTasksListResponse = {
       id: 1,
       title: 'Task 1',
       description: 'Description 1',
-      completed: false,
+      status: false,
     },
     {
       id: 2,
       title: 'Task 2',
       description: 'Description 2',
-      completed: false,
+      status: false,
     },
     {
       id: 3,
       title: 'Task 3',
       description: 'Description 3',
-      completed: false,
+      status: false,
     },
   ],
 };
@@ -46,7 +46,7 @@ const Home: NextPage = () => {
   const [enteredTitleEditedTask, setEnteredTitleEditedTask] = useState<
     string | null
   >(null);
-  const [editedTask, setEditedTask] = useState<ITask | null>(null);
+  const [editedTask, setEditedTask] = useState<ITodo | null>(null);
   const [hightestId, setHightestId] = useState<number>(0);
 
   const titleChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +74,7 @@ const Home: NextPage = () => {
         {
           id: newId,
           title: newTaskTitle,
-          completed: isCompleted,
+          status: isCompleted,
         },
       ]);
     } else {
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
         {
           id: newId,
           title: newTaskTitle,
-          completed: isCompleted,
+          status: isCompleted,
         },
       ]);
     }
@@ -91,7 +91,7 @@ const Home: NextPage = () => {
 
   const editTaskInTasksList = (
     editedTaskList: ITasksList,
-    replacedTask: ITask
+    replacedTask: ITodo
   ) => {
     return editedTaskList.map((task) => {
       return task.id === replacedTask.id ? replacedTask : task;
@@ -100,7 +100,7 @@ const Home: NextPage = () => {
 
   const deleteTaskInTasksList = (
     editedTaskList: ITasksList,
-    deletedTask: ITask
+    deletedTask: ITodo
   ) => {
     return editedTaskList.filter(
       (Task: { id: number }) => Task.id !== deletedTask.id
@@ -138,19 +138,19 @@ const Home: NextPage = () => {
           tasksList.map((task, index) => {
             if (
               tasksTypeToDisplay === TasksType.Completed &&
-              task.completed === false
+              task.status === false
             )
               return;
             if (
               tasksTypeToDisplay === TasksType.Uncompleted &&
-              task.completed === true
+              task.status === true
             )
               return;
             return editedTask?.id !== task.id ? (
               <li key={`task task--${task.id}`}>
                 <div
                   className={`task_name task_name--${task.id} ${
-                    task.completed
+                    task.status
                       ? 'task_name--completed'
                       : 'task_name--uncompleted'
                   }`}
@@ -166,7 +166,7 @@ const Home: NextPage = () => {
                       setTasksList(
                         editTaskInTasksList(tasksList, {
                           ...tasksList[index],
-                          completed: !tasksList[index].completed,
+                          status: !tasksList[index].status,
                         })
                       );
                     }}
