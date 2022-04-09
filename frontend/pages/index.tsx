@@ -146,7 +146,7 @@ const Home: NextPage = () => {
               task.completed === true
             )
               return;
-            return !editedTask ? (
+            return editedTask?.id !== task.id ? (
               <li key={`task task--${task.id}`}>
                 <div
                   className={`task_name task_name--${task.id} ${
@@ -163,27 +163,27 @@ const Home: NextPage = () => {
                   <button
                     className={`task_button task_button--done`}
                     onClick={() => {
-                      const oldTask = tasksList[index];
-
                       setTasksList(
                         editTaskInTasksList(tasksList, {
-                          ...oldTask,
-                          completed: !oldTask.completed,
+                          ...tasksList[index],
+                          completed: !tasksList[index].completed,
                         })
                       );
                     }}
                   >
                     done
                   </button>
+
                   <button
                     className={`task_button task_button--edit`}
                     onClick={() => {
-                      if (editedTask) return;
+                      if (editedTask !== null) return;
                       setEditedTask(tasksList[index]);
                     }}
                   >
                     edit
                   </button>
+
                   <button
                     className={`task_button task_button--delete`}
                     onClick={() => {
