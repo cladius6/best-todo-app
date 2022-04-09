@@ -1,7 +1,5 @@
-import { TaskType } from './../Interfaces/ITask';
-import { ITasksList, ITask } from './../Interfaces/ITask';
-import { IGetTasksListResponse } from './../Interfaces/IApi';
-import { IApi } from './../Interfaces/IApi';
+import { ITasksList, ITask, TasksType } from './../Interfaces/ITask';
+import { IApi, IGetTasksListResponse } from './../Interfaces/IApi';
 import type { NextPage } from 'next';
 import { ChangeEvent, useState } from 'react';
 import styles from '../styles/Home.module.css';
@@ -41,8 +39,8 @@ const api = new DumpApi();
 
 const Home: NextPage = () => {
   const [tasksList, setTasksList] = useState<ITasksList | null>(null);
-  const [tasksTypeToDisplay, setTasksTypeToDisplay] = useState<TaskType>(
-    TaskType.All
+  const [tasksTypeToDisplay, setTasksTypeToDisplay] = useState<TasksType>(
+    TasksType.All
   );
   const [enteredTitleNewTask, setEnteredTitleNewTask] = useState<string>('');
   const [enteredTitleEditedTask, setEnteredTitleEditedTask] = useState<
@@ -139,12 +137,12 @@ const Home: NextPage = () => {
         {tasksList &&
           tasksList.map((task, index) => {
             if (
-              tasksTypeToDisplay === TaskType.Completed &&
+              tasksTypeToDisplay === TasksType.Completed &&
               task.completed === false
             )
               return;
             if (
-              tasksTypeToDisplay === TaskType.Uncompleted &&
+              tasksTypeToDisplay === TasksType.Uncompleted &&
               task.completed === true
             )
               return;
@@ -250,21 +248,21 @@ const Home: NextPage = () => {
 
       <button
         onClick={() => {
-          setTasksTypeToDisplay(TaskType.All);
+          setTasksTypeToDisplay(TasksType.All);
         }}
       >
         ALL
       </button>
       <button
         onClick={() => {
-          setTasksTypeToDisplay(TaskType.Uncompleted);
+          setTasksTypeToDisplay(TasksType.Uncompleted);
         }}
       >
         TODO
       </button>
       <button
         onClick={() => {
-          setTasksTypeToDisplay(TaskType.Completed);
+          setTasksTypeToDisplay(TasksType.Completed);
         }}
       >
         DONE
