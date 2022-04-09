@@ -1,5 +1,10 @@
-export interface ITodo{
+export interface ITodo {
   id: number;
   title: string;
-  status: boolean;
+  status: StatusType;
+}
+
+export enum StatusType {
+  Active = 'Active',
+  Completed = 'Completed',
 }
