@@ -26,7 +26,7 @@ export class TodoListSingleton {
     this.todos.push(newTodo);
   }
 
-  remove(id: number) {
+  delete(id) {
     this.todos = this.todos.filter(todo => todo.id !== id);
   }
 
