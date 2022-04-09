@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ITodo, StatusType } from './interfaces/todo';
 
 @Injectable()
 export class TodoService {
-  private readonly todo;
+  private todo;
 
   constructor() {
     this.todo = new TodoListSingleton();
@@ -17,15 +18,23 @@ export class TodoListSingleton {
   private todos = [];
 
   add(todo) {
-    todo.id = this.todos.length + 1;
-    this.todos.push(todo);
+    const newTodo: ITodo = {
+      id: this.todos.length + 1,
+      title: todo.title,
+      status: StatusType.Active,
+    };
+    this.todos.push(newTodo);
   }
 
-  remove(id: number) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
+  delete(id: number) {
+    this.todos = this.todos.filter((todo) => todo.id !== id);
   }
 
-  getAll() {
+  getAll(): ITodo[] {
     return this.todos;
+  }
+
+  getOne(id: number): ITodo {
+    return this.todos.find((todo) => todo.id === id);
   }
 }

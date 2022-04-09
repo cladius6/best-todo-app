@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoListSingleton, TodoService } from './todo.service';
+import { StatusType } from './interfaces/todo';
 
 describe('TodoService', () => {
   let service: TodoService;
@@ -15,22 +16,31 @@ describe('TodoService', () => {
   });
 
   it('should add a todo item', () => {
-    const todo0 = {
-      title: 'test',
-      status: 0,
-    };
-    todo.add(todo0);
-    expect(todo.getAll()).toEqual([todo0]);
+    todo.add({ title: 'test' });
+    expect(todo.getAll()).toEqual([
+      {
+        id: 1,
+        title: 'test',
+        status: StatusType.Active,
+      },
+    ]);
   });
 
   it('should remove a todo item', () => {
     const todo0 = {
       title: 'test',
-      status: 0,
     };
     todo.add(todo0);
-    todo.remove(1);
+    todo.delete(1);
     expect(todo.getAll()).toEqual([]);
   });
 
+  it('should find a todo item by id', () => {
+    todo.add({ title: 'test' });
+    expect(todo.getOne(1)).toEqual({
+      id: 1,
+      title: 'test',
+      status: StatusType.Active,
+    });
+  });
 });

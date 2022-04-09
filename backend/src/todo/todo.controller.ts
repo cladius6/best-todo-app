@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ITodo } from './interfaces/todo';
+import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
 import { TodoService } from './todo.service';
 
 @Controller('todo')
@@ -25,10 +24,4 @@ export class TodoController {
   getOne(@Param('id') id: number) {
     return this.todoService.getTodo().getOne(Number(id));
   }
-
-  @Post('')
-  update(@Body() todo: ITodo) {
-    return this.todoService.getTodo().update(todo);
-  }
-
 }
