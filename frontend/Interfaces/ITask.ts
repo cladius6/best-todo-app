@@ -1,4 +1,4 @@
-export enum TaskType {
+export enum TasksType {
   All = 'ALL',
   Completed = 'COMPLETED',
   Uncompleted = 'UNCOMPLETED',
