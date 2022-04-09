@@ -1,18 +1,36 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TodoService } from './todo.service';
+import { TodoListSingleton, TodoService } from './todo.service';
 
 describe('TodoService', () => {
   let service: TodoService;
+  let todo: TodoListSingleton;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [TodoService],
-    }).compile();
-
-    service = module.get<TodoService>(TodoService);
+    service = new TodoService();
+    todo = service.getTodo();
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should add a todo item', () => {
+    const todo0 = {
+      title: 'test',
+      status: 0,
+    };
+    todo.add(todo0);
+    expect(todo.getAll()).toEqual([todo0]);
+  });
+
+  it('should remove a todo item', () => {
+    const todo0 = {
+      title: 'test',
+      status: 0,
+    };
+    todo.add(todo0);
+    todo.remove(1);
+    expect(todo.getAll()).toEqual([]);
+  });
+
 });
