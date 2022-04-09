@@ -111,7 +111,7 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <h1>BEST TODO APP</h1>
 
-      <form onSubmit={submitNewTask}>
+      <form id="formAddTask" onSubmit={submitNewTask}>
         <div className={styles.control}>
           <label htmlFor="newTask" className={styles.label}>
             add task
@@ -119,7 +119,7 @@ const Home: NextPage = () => {
 
           <input
             id="newTask"
-            type="title"
+            type="text"
             required
             value={enteredTitleNewTask}
             onChange={titleChangeNewTaskHandler}
@@ -127,13 +127,17 @@ const Home: NextPage = () => {
           />
         </div>
         <div className="">
-          <button id="submit-new-task" type="submit" className={styles.button}>
+          <button
+            id="buttonSubmitNewTask"
+            type="submit"
+            className={`button button_task button_task--add`}
+          >
             ADD
           </button>
         </div>
       </form>
 
-      <ul>
+      <ul id="tasksList">
         {tasksList &&
           tasksList.map((task, index) => {
             if (
@@ -147,7 +151,10 @@ const Home: NextPage = () => {
             )
               return;
             return editedTask?.id !== task.id ? (
-              <li key={`task task--${task.id}`}>
+              <li
+                className={`task task--${task.id}`}
+                key={`task task--${task.id}`}
+              >
                 <div
                   className={`task_name task_name--${task.id} ${
                     task.status
@@ -161,7 +168,8 @@ const Home: NextPage = () => {
                   className={`task_control-panel task_control-panel--${task.id}`}
                 >
                   <button
-                    className={`task_button task_button--done`}
+                    id="buttonTaskToggleDone"
+                    className={`button button_task button_task--done`}
                     onClick={() => {
                       setTasksList(
                         editTaskInTasksList(tasksList, {
@@ -175,7 +183,8 @@ const Home: NextPage = () => {
                   </button>
 
                   <button
-                    className={`task_button task_button--edit`}
+                    id="buttonTaskEdit"
+                    className={`button button_task button_task--edit`}
                     onClick={() => {
                       if (editedTask !== null) return;
                       setEditedTask(tasksList[index]);
@@ -185,7 +194,8 @@ const Home: NextPage = () => {
                   </button>
 
                   <button
-                    className={`task_button task_button--delete`}
+                    id="buttonTaskDelete"
+                    className={`button button_task button_task--delete`}
                     onClick={() => {
                       setTasksList(
                         deleteTaskInTasksList(tasksList, tasksList[index])
@@ -235,9 +245,9 @@ const Home: NextPage = () => {
                 </div>
 
                 <button
-                  id="submit-form"
+                  id="buttonEditedTaskSave"
                   type="submit"
-                  className={styles.button}
+                  className={`button button_task button_task--edit`}
                 >
                   save
                 </button>
@@ -247,20 +257,28 @@ const Home: NextPage = () => {
       </ul>
 
       <button
+        id="buttonTypeDisplayAll"
+        className={`button button_type-display button_type-display--all`}
         onClick={() => {
           setTasksTypeToDisplay(TasksType.All);
         }}
       >
         ALL
       </button>
+
       <button
+        id="buttonTypeDisplayTodo"
+        className={`button button_type-display button_type-display--todo`}
         onClick={() => {
           setTasksTypeToDisplay(TasksType.Uncompleted);
         }}
       >
         TODO
       </button>
+
       <button
+        id="buttonTypeDisplayDone"
+        className={`button button_type-display button_type-display--done`}
         onClick={() => {
           setTasksTypeToDisplay(TasksType.Completed);
         }}
