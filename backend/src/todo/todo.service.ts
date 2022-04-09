@@ -37,4 +37,9 @@ export class TodoListSingleton {
   getOne(id: number): ITodo {
     return this.todos.find((todo) => todo.id === id);
   }
+
+  update(todo: ITodo) {
+    const index = this.todos.findIndex((t) => t.id === todo.id);
+    this.todos[index] = todo;
+  }
 }

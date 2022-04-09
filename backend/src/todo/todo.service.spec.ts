@@ -43,4 +43,19 @@ describe('TodoService', () => {
       status: StatusType.Active,
     });
   });
+
+  it('should update a todo item correctly', () => {
+    todo.add({ title: 'test' });
+    const updatedTodo = {
+      id: 1,
+      title: 'test2',
+      status: StatusType.Completed,
+    };
+    todo.update(updatedTodo);
+    expect(todo.getOne(1)).toEqual({
+      id: 1,
+      title: 'test2',
+      status: StatusType.Completed,
+    });
+  });
 });
