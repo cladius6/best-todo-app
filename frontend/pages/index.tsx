@@ -1,28 +1,33 @@
-import { ITasksList, ITodo, TasksType } from '../Interfaces/ITodo';
+import { ITasksList, ITodo, TasksType, StatusType } from '../Interfaces/ITodo';
 import { IApi, IGetTasksListResponse } from './../Interfaces/IApi';
 import type { NextPage } from 'next';
 import { ChangeEvent, useState } from 'react';
 import styles from '../styles/Home.module.css';
+
+fetch('/api/add', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ number_one: 1, number_two: 'two' }),
+});
 
 const exampleResponse: IGetTasksListResponse = {
   tasksList: [
     {
       id: 1,
       title: 'Task 1',
-      description: 'Description 1',
-      status: false,
+      status: StatusType.Active,
     },
     {
       id: 2,
       title: 'Task 2',
-      description: 'Description 2',
-      status: false,
+      status: StatusType.Active,
     },
     {
       id: 3,
       title: 'Task 3',
-      description: 'Description 3',
-      status: false,
+      status: StatusType.Active,
     },
   ],
 };
@@ -65,7 +70,10 @@ const Home: NextPage = () => {
     setEnteredTitleNewTask('');
   };
 
-  const addTask = (newTaskTitle: string, isCompleted: boolean = false) => {
+  const addTask = (
+    newTaskTitle: string,
+    isCompleted: StatusType = StatusType.Active
+  ) => {
     let newId = hightestId + 1;
 
     if (tasksList !== null && tasksList.length > 0) {
@@ -142,12 +150,12 @@ const Home: NextPage = () => {
           tasksList.map((task, index) => {
             if (
               tasksTypeToDisplay === TasksType.Completed &&
-              task.status === false
+              task.status === StatusType.Active
             )
               return;
             if (
               tasksTypeToDisplay === TasksType.Uncompleted &&
-              task.status === true
+              task.status === StatusType.Completed
             )
               return;
             return editedTask?.id !== task.id ? (
@@ -157,7 +165,7 @@ const Home: NextPage = () => {
               >
                 <div
                   className={`task_name task_name--${task.id} ${
-                    task.status
+                    task.status === StatusType.Completed
                       ? 'task_name--completed'
                       : 'task_name--uncompleted'
                   }`}
@@ -174,7 +182,10 @@ const Home: NextPage = () => {
                       setTasksList(
                         editTaskInTasksList(tasksList, {
                           ...tasksList[index],
-                          status: !tasksList[index].status,
+                          status:
+                            tasksList[index].status === StatusType.Active
+                              ? StatusType.Completed
+                              : StatusType.Active,
                         })
                       );
                     }}

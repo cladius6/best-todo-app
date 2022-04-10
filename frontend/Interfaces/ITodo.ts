@@ -9,5 +9,10 @@ export interface ITodo {
   id: number;
   title: string;
   description?: string;
-  status: boolean;
+  status: StatusType;
+}
+
+export enum StatusType {
+  Active = 'Active',
+  Completed = 'Completed',
 }
