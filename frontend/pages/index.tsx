@@ -60,36 +60,6 @@ class TodoApi {
   }
 }
 
-const exampleResponse: IGetTasksListResponse = {
-  tasksList: [
-    {
-      id: 1,
-      title: 'Task 1',
-      status: StatusType.Active,
-    },
-    {
-      id: 2,
-      title: 'Task 2',
-      status: StatusType.Active,
-    },
-    {
-      id: 3,
-      title: 'Task 3',
-      status: StatusType.Active,
-    },
-  ],
-};
-
-class DumpApi implements IApi {
-  getTasksList(): Promise<IGetTasksListResponse> {
-    return new Promise((resolve) =>
-      setTimeout(() => resolve(exampleResponse), 1000)
-    );
-  }
-}
-
-const api = new DumpApi();
-
 const Home: NextPage = () => {
   const [tasksList, setTasksList] = useState<ITasksList | null>(null);
   const [tasksTypeToDisplay, setTasksTypeToDisplay] = useState<TasksType>(
@@ -101,7 +71,7 @@ const Home: NextPage = () => {
   >(null);
   const [editedTask, setEditedTask] = useState<ITodo | null>(null);
   const [hightestId, setHightestId] = useState<number>(0);
-  const [todoApiResponse, setTodoApiResponse] = useState<number | null>(null);
+  const [_todoApiResponse, setTodoApiResponse] = useState<number | null>(null);
 
   useEffect(() => {
     TodoApi.getTodos().then((data) => {
@@ -122,7 +92,7 @@ const Home: NextPage = () => {
 
   const submitNewTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // ! dumb implementation, remove setTimeout and keep render after data fetch
+    // ! dumb implementation, remove setTimeout and keep render after data fetch, I don't know how to do it
     TodoApi.createNewTodo(enteredTitleNewTask).then(() => {
       setTimeout(() => {
         TodoApi.getTodos().then((data) => {
