@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -13,7 +11,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AddTodoDto } from './dto/add-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
 import { StatusType } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
