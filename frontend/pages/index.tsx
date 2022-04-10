@@ -255,6 +255,13 @@ const Home: NextPage = () => {
                               : StatusType.Active,
                         })
                       );
+                      TodoApi.editTodo({
+                        ...tasksList[index],
+                        status:
+                          tasksList[index].status === StatusType.Active
+                            ? StatusType.Completed
+                            : StatusType.Active,
+                      });
                     }}
                   >
                     done
