@@ -23,9 +23,7 @@ export class TodoController {
 
   @Get('')
   async findAll() {
-    const result = await this.todoService.findAll();
-    if (result.length === 0) return [];
-    return result;
+    return await this.todoService.findAll();
   }
 
   @Get('completed')

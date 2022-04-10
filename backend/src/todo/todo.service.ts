@@ -15,21 +15,23 @@ export class TodoService {
     private todosRepository: Repository<TodoEntity>,
   ) {}
 
-  findAll(): Promise<TodoEntity[]> {
-    return this.todosRepository.find();
+  async findAll(): Promise<TodoEntity[]> {
+    const result = await this.todosRepository.find();
+    if (result.length === 0) return [];
+    return result;
   }
 
   async findOne(id: number): Promise<TodoEntity | any> {
-      const result = await this.todosRepository.findOne(id);
-      if (result === undefined) {
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            error: 'Todo not found',
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      }else return result;
+    const result = await this.todosRepository.findOne(id);
+    if (result === undefined) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Todo not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    } else return result;
   }
 
   async create(newTodo: AddTodoDto): Promise<void> {
