@@ -21,7 +21,7 @@ export class TodoService {
     return result;
   }
 
-  async findOne(id: number): Promise<TodoEntity | any> {
+  async findOne(id: number): Promise<TodoEntity> {
     const result = await this.todosRepository.findOne(id);
     if (result === undefined) {
       throw new HttpException(
@@ -40,7 +40,7 @@ export class TodoService {
     await this.todosRepository.save(todo);
   }
 
-  async update(todo: UpdateTodoDto): Promise<void | any> {
+  async update(todo: UpdateTodoDto): Promise<void> {
     try {
       await this.todosRepository.update(todo.id, todo);
     } catch (e) {
@@ -55,7 +55,17 @@ export class TodoService {
   }
 
   async delete(id: number): Promise<void> {
-    await this.todosRepository.delete(id);
+    if (await this.todosRepository.findOne(id)) {
+      await this.todosRepository.delete(id);
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Todo not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async findAllByStatus(status: StatusType): Promise<TodoEntity[]> {
