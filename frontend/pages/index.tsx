@@ -4,30 +4,46 @@ import type { NextPage } from 'next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
-async function getTodos() {
-  const response = await fetch('http://localhost:3000/todo');
-  const data = await response.json();
-  console.log('response', response);
-  console.log('data', data);
-
-  return data;
+interface todoPutRequest {
+  title: string;
 }
 
-const PUTRequest = { title: 'test1' };
+const mockTodo: todoPutRequest = { title: 'Todo 1' };
 
-async function putTodo(): Promise<any> {
-  fetch('http://localhost:3000/todo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    body: new URLSearchParams({
-      title: 'test1',
-    }).toString(),
-  }).then((res) => {
-    console.log(res);
-    return res;
-  });
+class TodoApi {
+  static async getTodos() {
+    const response = await fetch('http://localhost:3000/todo');
+    const data = await response.json();
+    console.log('response', response.status);
+    console.log('data', data);
+
+    return data;
+  }
+
+  static async addNewTodo(todo: any): Promise<any> {
+    fetch('http://localhost:3000/todo', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: new URLSearchParams(todo).toString(),
+    }).then((res) => {
+      console.log(res.status);
+      return res;
+    });
+  }
+
+  static async deleteTodo(id: number): Promise<any> {
+    fetch(`http://localhost:3000/todo/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+    }).then((res) => {
+      console.log(res.status);
+      return res;
+    });
+  }
 }
 
 const exampleResponse: IGetTasksListResponse = {
@@ -73,9 +89,9 @@ const Home: NextPage = () => {
   const [hightestId, setHightestId] = useState<number>(0);
 
   useEffect(() => {
-    putTodo();
-    getTodos();
-  }, [editedTask]);
+    TodoApi.addNewTodo(mockTodo);
+    TodoApi.getTodos();
+  }, []);
 
   const titleChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setEnteredTitleNewTask(event.target.value);
