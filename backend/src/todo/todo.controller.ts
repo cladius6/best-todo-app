@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { AddTodoDto } from './dto/add-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { StatusType } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
 @Controller('todo')
@@ -29,12 +30,12 @@ export class TodoController {
 
   @Get('completed')
   getAllCompleted() {
-    return this.todoService.getTodo().getAllCompleted();
+    return this.todoService.findAllByStatus(StatusType.Completed);
   }
 
   @Get('uncompleted')
   getAllUncompleted() {
-    return this.todoService.getTodo().getAllUncompleted();
+    return this.todoService.findAllByStatus(StatusType.Active)
   }
 
   @Get(':id')
