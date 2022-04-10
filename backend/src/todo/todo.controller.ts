@@ -16,6 +16,11 @@ export class TodoController {
     return this.todoService.getTodo().getAllCompleted();
   }
 
+  @Get('uncompleted')
+  getAllUncompleted() {
+    return this.todoService.getTodo().getAllUncompleted();
+  }
+
   @Get(':id')
   getOne(@Param('id') id: number) {
     return this.todoService.getTodo().getOne(Number(id));

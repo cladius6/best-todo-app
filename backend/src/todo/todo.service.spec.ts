@@ -78,4 +78,23 @@ describe('TodoService', () => {
       },
     ])
   });
+
+  it('should return all uncompleted todo items', () => {
+    todo.add({ title: 'test'});
+    todo.update({ id: 1, title: 'test2', status: StatusType.Completed });
+    todo.add({ title: 'test2'});
+    todo.add({ title: 'test3' });
+    expect(todo.getAllUncompleted()).toEqual([
+      {
+        id: 2,
+        title: 'test2',
+        status: StatusType.Active,
+      },
+      {
+        id: 3,
+        title: 'test3',
+        status: StatusType.Active,
+      },
+    ])
+  })
 });

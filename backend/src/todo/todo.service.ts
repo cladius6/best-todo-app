@@ -38,6 +38,10 @@ export class TodoListSingleton {
     return this.todos.filter((todo) => todo.status == StatusType.Completed);
   }
 
+  getAllUncompleted(): ITodo[] {
+    return this.todos.filter((todo) => todo.status == StatusType.Active);
+  }
+
   getOne(id: number): ITodo {
     return this.todos.find((todo) => todo.id === id);
   }
