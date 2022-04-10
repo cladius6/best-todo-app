@@ -1,63 +1,78 @@
-import { Injectable } from '@nestjs/common';
-import { ITodo, StatusType } from './interfaces/todo';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AddTodoDto } from './dto/add-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
+import { TodoEntity } from './entity/todo.entity';
+import { StatusType } from './interfaces/todo';
 
 @Injectable()
 export class TodoService {
   private todo;
 
-  constructor() {
-    this.todo = new TodoListSingleton();
+  constructor(
+    @InjectRepository(TodoEntity)
+    private todosRepository: Repository<TodoEntity>,
+  ) {}
+
+  async findAll(): Promise<TodoEntity[]> {
+    const result = await this.todosRepository.find();
+    if (result.length === 0) return [];
+    return result;
   }
 
-  getTodo() {
-    return this.todo;
-  }
-}
-
-export class TodoListSingleton {
-  private todos = [];
-
-  add(todo) {
-    const newTodo: ITodo = {
-      id: this.todos.length + 1,
-      title: todo.title,
-      status: StatusType.Active,
-    };
-    this.todos.push(newTodo);
+  async findOne(id: number): Promise<TodoEntity> {
+    const result = await this.todosRepository.findOne(id);
+    if (result === undefined) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Todo not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    } else return result;
   }
 
-  delete(id) {
-    const index = this.todos.findIndex((todo) => todo.id === id);
-    if (index !== -1) {
-      this.todos.splice(index, 1);
-    } else throw new Error('Todo not found');
+  async create(newTodo: AddTodoDto): Promise<void> {
+    const todo = new TodoEntity();
+    todo.title = newTodo.title;
+    await this.todosRepository.save(todo);
   }
 
-  getAll(): ITodo[] {
-    return this.todos;
-  }
-
-  getAllCompleted(): ITodo[] {
-    return this.todos.filter((todo) => todo.status == StatusType.Completed);
-  }
-
-  getAllUncompleted(): ITodo[] {
-    return this.todos.filter((todo) => todo.status == StatusType.Active);
-  }
-
-  getOne(id: number): ITodo {
-    const result = this.todos.find((todo) => todo.id === id);
-    if (result) {
-      return result;
-    } else {
-      throw new Error('Todo not found');
+  async update(todo: UpdateTodoDto): Promise<void> {
+    try {
+      await this.todosRepository.update(todo.id, todo);
+    } catch (e) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Todo not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
-  update(todo: ITodo) {
-    const index = this.todos.findIndex((t) => t.id === todo.id);
-    if (index !== -1) {
-      this.todos[index] = todo;
-    } else throw new Error('Todo not found');
+  async delete(id: number): Promise<void> {
+    if (await this.todosRepository.findOne(id)) {
+      await this.todosRepository.delete(id);
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Todo not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  async findAllByStatus(status: StatusType): Promise<TodoEntity[]> {
+    return this.todosRepository.find({
+      where: {
+        status: status,
+      },
+    });
   }
 }

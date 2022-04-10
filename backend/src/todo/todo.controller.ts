@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -13,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AddTodoDto } from './dto/add-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { StatusType } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
 @Controller('todo')
@@ -21,51 +19,39 @@ export class TodoController {
   constructor(private todoService: TodoService) {}
 
   @Get('')
-  getAll() {
-    return this.todoService.getTodo().getAll();
+  async findAll() {
+    return await this.todoService.findAll();
   }
 
   @Get('completed')
-  getAllCompleted() {
-    return this.todoService.getTodo().getAllCompleted();
+  async getAllCompleted() {
+    return await this.todoService.findAllByStatus(StatusType.Completed);
   }
 
-  @Get('uncompleted')
-  getAllUncompleted() {
-    return this.todoService.getTodo().getAllUncompleted();
+  @Get('active')
+  async getAllUncompleted() {
+    return await this.todoService.findAllByStatus(StatusType.Active);
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return this.todoService.getTodo().getOne(id);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.todoService.findOne(id);
   }
 
   @Put('')
   @UsePipes(new ValidationPipe({ transform: true }))
-  add(@Body() todo: AddTodoDto) {
-    return this.todoService.getTodo().add(todo);
+  async add(@Body() todo: AddTodoDto) {
+    return await this.todoService.create(todo);
   }
 
   @Post('')
   @UsePipes(new ValidationPipe({ transform: true }))
-  update(@Body() todo: UpdateTodoDto) {
-    try {
-      return this.todoService.getTodo().update(todo);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+  async update(@Body() todo) {
+    return await this.todoService.update(todo);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return this.todoService.getTodo().delete(id);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.todoService.delete(id);
   }
 }
