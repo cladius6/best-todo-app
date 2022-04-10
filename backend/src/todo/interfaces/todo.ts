@@ -4,6 +4,10 @@ export interface ITodo {
   status: StatusType;
 }
 
+export interface IAddTodo {
+  title: string;
+}
+
 export enum StatusType {
   Active = 'Active',
   Completed = 'Completed',

@@ -1,5 +1,19 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
-import { ITodo } from './interfaces/todo';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { AddTodoDto } from './dto/add-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
 
 @Controller('todo')
@@ -22,32 +36,36 @@ export class TodoController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: number) {
+  getOne(@Param('id', ParseIntPipe) id: number) {
     try {
-      return this.todoService.getTodo().getOne(Number(id));
+      return this.todoService.getTodo().getOne(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Put('')
-  add(@Body() todo) {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  add(@Body() todo: AddTodoDto) {
     return this.todoService.getTodo().add(todo);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: number) {
+  @Post('')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  update(@Body() todo: UpdateTodoDto) {
     try {
-      return this.todoService.getTodo().delete(Number(id));
+      return this.todoService.getTodo().update(todo);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
-
-  @Post('')
-  update(@Body() todo: ITodo) {
-    return this.todoService.getTodo().update(todo);
+  @Delete(':id')
+  delete(@Param('id', ParseIntPipe) id: number) {
+    try {
+      return this.todoService.getTodo().delete(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
-
 }

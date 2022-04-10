@@ -16,15 +16,18 @@ async function getTodos() {
 const PUTRequest = { title: 'test1' };
 
 async function putTodo(): Promise<any> {
-  const options = {
-    method: 'PUT',
+  fetch('http://localhost:3000/todo', {
+    method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
-    body: PUTRequest.title,
-  };
-
-  await fetch('http://localhost:3000/todo', options);
+    body: new URLSearchParams({
+      title: 'test1',
+    }).toString(),
+  }).then((res) => {
+    console.log(res);
+    return res;
+  });
 }
 
 const exampleResponse: IGetTasksListResponse = {
