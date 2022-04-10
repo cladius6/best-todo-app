@@ -1,4 +1,3 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { TodoListSingleton, TodoService } from './todo.service';
 import { StatusType } from './interfaces/todo';
 

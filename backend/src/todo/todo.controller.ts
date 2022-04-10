@@ -9,13 +9,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Res,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AddTodoDto } from './dto/add-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { ITodo } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
 @Controller('todo')
