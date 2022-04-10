@@ -8,8 +8,6 @@ class TodoApi {
   static async getTodos() {
     const response = await fetch('http://localhost:3000/todo');
     const data = await response.json();
-
-    console.log(data);
     return [data, response.status];
   }
 
@@ -104,14 +102,13 @@ const Home: NextPage = () => {
   const [editedTask, setEditedTask] = useState<ITodo | null>(null);
   const [hightestId, setHightestId] = useState<number>(0);
   const [todoApiResponse, setTodoApiResponse] = useState<number | null>(null);
-  const [isNewTaskAdded, setIsNewTaskAdded] = useState<string | null | any>();
 
   useEffect(() => {
     TodoApi.getTodos().then((data) => {
       setTasksList(data[0]);
       setTodoApiResponse(data[1]);
     });
-  }, [isNewTaskAdded]);
+  }, []);
 
   const titleChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setEnteredTitleNewTask(event.target.value);
@@ -185,15 +182,6 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <button
-        id="buttonTaskEdit"
-        className={`button button_task button_task--edit`}
-        onClick={() => {
-          console.log(tasksList);
-        }}
-      >
-        TEST
-      </button>
       <h1>BEST TODO APP</h1>
 
       <form id="formAddTask" onSubmit={submitNewTask}>
