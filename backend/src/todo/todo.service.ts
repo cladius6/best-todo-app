@@ -1,6 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Catch, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityNotFoundError, Repository } from 'typeorm';
 import { AddTodoDto } from './dto/add-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoEntity } from './entity/todo.entity';
@@ -15,16 +15,21 @@ export class TodoService {
     private todosRepository: Repository<TodoEntity>,
   ) {}
 
-  getTodo() {
-    return this.todo;
-  }
-
   findAll(): Promise<TodoEntity[]> {
     return this.todosRepository.find();
   }
 
-  findOne(id: number): Promise<TodoEntity> {
-    return this.todosRepository.findOne(id);
+  async findOne(id: number): Promise<TodoEntity | any> {
+      const result = await this.todosRepository.findOne(id);
+      if (result === undefined) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            error: 'Todo not found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }else return result;
   }
 
   async create(newTodo: AddTodoDto): Promise<void> {
@@ -33,8 +38,18 @@ export class TodoService {
     await this.todosRepository.save(todo);
   }
 
-  async update(todo: UpdateTodoDto): Promise<void> {
-    await this.todosRepository.update(todo.id, todo);
+  async update(todo: UpdateTodoDto): Promise<void | any> {
+    try {
+      await this.todosRepository.update(todo.id, todo);
+    } catch (e) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Todo not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async delete(id: number): Promise<void> {

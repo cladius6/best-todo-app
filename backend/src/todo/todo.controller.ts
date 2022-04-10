@@ -39,10 +39,8 @@ export class TodoController {
   }
 
   @Get(':id')
-  async getOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.todoService.findOne(id);
-    if (result === undefined) throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    return result;
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.todoService.findOne(id);
   }
 
   @Put('')
