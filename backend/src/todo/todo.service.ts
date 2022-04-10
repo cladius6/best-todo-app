@@ -27,7 +27,7 @@ export class TodoListSingleton {
   }
 
   delete(id) {
-    const index = this.todos.findIndex(todo => todo.id === id);
+    const index = this.todos.findIndex((todo) => todo.id === id);
     if (index !== -1) {
       this.todos.splice(index, 1);
     } else throw new Error('Todo not found');
