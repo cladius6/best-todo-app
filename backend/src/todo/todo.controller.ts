@@ -41,7 +41,11 @@ export class TodoController {
   @Post('')
   @UsePipes(new ValidationPipe({ transform: true }))
   update(@Body() todo: UpdateTodoDto) {
-    return this.todoService.getTodo().update(todo);
+    try {
+      return this.todoService.getTodo().update(todo);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Delete(':id')

@@ -105,4 +105,8 @@ describe('TodoService', () => {
   it('should throw an error when trying to delete a todo item by id that does not exist', () => {
     expect(() => todo.delete(1)).toThrowError('Todo not found');
   });
+
+  it('should throw an error when trying to update a todo item by id that does not exist', () => {
+    expect(() => todo.update({ id: 1, title: 'test', status: StatusType.Active })).toThrowError('Todo not found');
+  });
 });
