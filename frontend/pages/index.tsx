@@ -103,14 +103,15 @@ const Home: NextPage = () => {
   >(null);
   const [editedTask, setEditedTask] = useState<ITodo | null>(null);
   const [hightestId, setHightestId] = useState<number>(0);
-  const [_TodoApiResponse, setTod0ApiResponse] = useState<number | null>(null);
+  const [todoApiResponse, setTodoApiResponse] = useState<number | null>(null);
+  const [isNewTaskAdded, setIsNewTaskAdded] = useState<string | null | any>();
 
   useEffect(() => {
     TodoApi.getTodos().then((data) => {
       setTasksList(data[0]);
-      setTod0ApiResponse(data[1]);
+      setTodoApiResponse(data[1]);
     });
-  }, []);
+  }, [isNewTaskAdded]);
 
   const titleChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setEnteredTitleNewTask(event.target.value);
@@ -124,7 +125,16 @@ const Home: NextPage = () => {
 
   const submitNewTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTask(enteredTitleNewTask);
+    // ! dumb implementation, remove setTimeout and keep render after data fetch
+    TodoApi.createNewTodo(enteredTitleNewTask).then(() => {
+      setTimeout(() => {
+        TodoApi.getTodos().then((data) => {
+          setTasksList(data[0]);
+          setTodoApiResponse(data[1]);
+        });
+      }, 100);
+    });
+
     setEnteredTitleNewTask('');
   };
 
