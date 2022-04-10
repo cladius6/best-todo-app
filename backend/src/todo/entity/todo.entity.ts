@@ -1,18 +1,18 @@
-import {Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { ITodo, StatusType} from "../interfaces/todo";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ITodo, StatusType } from '../interfaces/todo';
 
 @Entity()
 export class TodoEntity implements ITodo {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @Column({
-        type: "enum",
-        enum: StatusType,
-        default: StatusType.Active
-    })
-    status: StatusType;
+  @Column({
+    type: 'enum',
+    enum: StatusType,
+    default: StatusType.Active,
+  })
+  status: StatusType;
 }

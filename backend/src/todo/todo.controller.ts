@@ -27,13 +27,13 @@ export class TodoController {
   }
 
   @Get('completed')
-  getAllCompleted() {
-    return this.todoService.findAllByStatus(StatusType.Completed);
+  async getAllCompleted() {
+    return await this.todoService.findAllByStatus(StatusType.Completed);
   }
 
   @Get('active')
-  getAllUncompleted() {
-    return this.todoService.findAllByStatus(StatusType.Active)
+  async getAllUncompleted() {
+    return await this.todoService.findAllByStatus(StatusType.Active);
   }
 
   @Get(':id')
@@ -55,6 +55,6 @@ export class TodoController {
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-      return await this.todoService.delete(id);
+    return await this.todoService.delete(id);
   }
 }
