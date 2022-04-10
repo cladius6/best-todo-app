@@ -26,8 +26,11 @@ export class TodoListSingleton {
     this.todos.push(newTodo);
   }
 
-  delete(id: number) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+  delete(id) {
+    const index = this.todos.findIndex(todo => todo.id === id);
+    if (index !== -1) {
+      this.todos.splice(index, 1);
+    } else throw new Error('Todo not found');
   }
 
   getAll(): ITodo[] {

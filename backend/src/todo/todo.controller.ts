@@ -37,7 +37,11 @@ export class TodoController {
 
   @Delete(':id')
   delete(@Param('id') id: number) {
-    this.todoService.getTodo().delete(Number(id));
+    try {
+      return this.todoService.getTodo().delete(Number(id));
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
 
