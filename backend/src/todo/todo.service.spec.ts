@@ -58,4 +58,51 @@ describe('TodoService', () => {
       status: StatusType.Completed,
     });
   });
+
+  it('should return all completed todo items', () => {
+    todo.add({ title: 'test'});
+    todo.update({ id: 1, title: 'test2', status: StatusType.Completed });
+    todo.add({ title: 'test2'});
+    todo.update({ id: 2, title: 'test3', status: StatusType.Completed });
+    todo.add({ title: 'test3' });
+    expect(todo.getAllCompleted()).toEqual([
+      {
+        id: 1,
+        title: 'test2',
+        status: StatusType.Completed,
+      },
+      {
+        id: 2,
+        title: 'test3',
+        status: StatusType.Completed,
+      },
+    ])
+  });
+
+  it('should return all uncompleted todo items', () => {
+    todo.add({ title: 'test'});
+    todo.update({ id: 1, title: 'test2', status: StatusType.Completed });
+    todo.add({ title: 'test2'});
+    todo.add({ title: 'test3' });
+    expect(todo.getAllUncompleted()).toEqual([
+      {
+        id: 2,
+        title: 'test2',
+        status: StatusType.Active,
+      },
+      {
+        id: 3,
+        title: 'test3',
+        status: StatusType.Active,
+      },
+    ])
+  })
+
+  it('should throw an error when trying to get a todo item by id that does not exist', () => {
+    expect(() => todo.getOne(1)).toThrowError('Todo not found');
+  });
+
+  it('should throw an error when trying to delete a todo item by id that does not exist', () => {
+    expect(() => todo.delete(1)).toThrowError('Todo not found');
+  });
 });

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { ITodo } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
@@ -11,6 +11,25 @@ export class TodoController {
     return this.todoService.getTodo().getAll();
   }
 
+  @Get('completed')
+  getAllCompleted() {
+    return this.todoService.getTodo().getAllCompleted();
+  }
+
+  @Get('uncompleted')
+  getAllUncompleted() {
+    return this.todoService.getTodo().getAllUncompleted();
+  }
+
+  @Get(':id')
+  getOne(@Param('id') id: number) {
+    try {
+      return this.todoService.getTodo().getOne(Number(id));
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
   @Put('')
   add(@Body() todo) {
     return this.todoService.getTodo().add(todo);
@@ -18,13 +37,13 @@ export class TodoController {
 
   @Delete(':id')
   delete(@Param('id') id: number) {
-    this.todoService.getTodo().delete(Number(id));
+    try {
+      return this.todoService.getTodo().delete(Number(id));
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Get(':id')
-  getOne(@Param('id') id: number) {
-    return this.todoService.getTodo().getOne(Number(id));
-  }
 
   @Post('')
   update(@Body() todo: ITodo) {

@@ -26,16 +26,32 @@ export class TodoListSingleton {
     this.todos.push(newTodo);
   }
 
-  delete(id: number) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+  delete(id) {
+    const index = this.todos.findIndex(todo => todo.id === id);
+    if (index !== -1) {
+      this.todos.splice(index, 1);
+    } else throw new Error('Todo not found');
   }
 
   getAll(): ITodo[] {
     return this.todos;
   }
 
+  getAllCompleted(): ITodo[] {
+    return this.todos.filter((todo) => todo.status == StatusType.Completed);
+  }
+
+  getAllUncompleted(): ITodo[] {
+    return this.todos.filter((todo) => todo.status == StatusType.Active);
+  }
+
   getOne(id: number): ITodo {
-    return this.todos.find((todo) => todo.id === id);
+    const result = this.todos.find((todo) => todo.id === id);
+    if (result) {
+      return result;
+    } else {
+      throw new Error('Todo not found');
+    }
   }
 
   update(todo: ITodo) {
