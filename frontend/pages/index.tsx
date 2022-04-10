@@ -299,6 +299,12 @@ const Home: NextPage = () => {
                           : editedTask.title,
                     })
                   );
+                  if (enteredTitleEditedTask !== editedTask.title) {
+                    TodoApi.editTodo({
+                      ...editedTask,
+                      title: enteredTitleEditedTask,
+                    });
+                  }
 
                   setEditedTask(null);
                   setEnteredTitleEditedTask(null);
