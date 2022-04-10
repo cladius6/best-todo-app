@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AddTodoDto } from './dto/add-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 import { ITodo } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
@@ -37,6 +38,12 @@ export class TodoController {
     return this.todoService.getTodo().add(todo);
   }
 
+  @Post('')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  update(@Body() todo: UpdateTodoDto) {
+    return this.todoService.getTodo().update(todo);
+  }
+
   @Delete(':id')
   delete(@Param('id') id: number) {
     try {
@@ -44,12 +51,6 @@ export class TodoController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
-  }
-
-
-  @Post('')
-  update(@Body() todo: ITodo) {
-    return this.todoService.getTodo().update(todo);
   }
 
 }
