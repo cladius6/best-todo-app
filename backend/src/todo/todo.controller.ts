@@ -21,13 +21,11 @@ export class TodoController {
   constructor(private todoService: TodoService) {}
 
   @Get('')
-  async getAll() {
-    // return this.todoService.getTodo().getAll();
+  async findAll() {
     const result = await this.todoService.findAll();
     if (result.length === 0) return [];
     return result;
   }
-
 
   @Get('completed')
   getAllCompleted() {
@@ -41,36 +39,25 @@ export class TodoController {
 
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) id: number) {
-    try {
-      // return this.todoService.getTodo().getOne(id);
-      return await this.todoService.findOne(id);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+    const result = await this.todoService.findOne(id);
+    if (result === undefined) throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    return result;
   }
 
   @Put('')
   @UsePipes(new ValidationPipe({ transform: true }))
-  add(@Body() todo: AddTodoDto) {
-    return this.todoService.getTodo().add(todo);
+  async add(@Body() todo: AddTodoDto) {
+    return await this.todoService.create(todo);
   }
 
   @Post('')
   @UsePipes(new ValidationPipe({ transform: true }))
-  update(@Body() todo: UpdateTodoDto) {
-    try {
-      return this.todoService.getTodo().update(todo);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+  async update(@Body() todo) {
+    return await this.todoService.update(todo);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return this.todoService.getTodo().delete(id);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+  async delete(@Param('id', ParseIntPipe) id: number) {
+      return await this.todoService.delete(id);
   }
 }
