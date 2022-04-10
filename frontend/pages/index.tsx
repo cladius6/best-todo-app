@@ -4,32 +4,48 @@ import type { NextPage } from 'next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
-interface todoPutRequest {
-  title: string;
-}
-
-const mockTodo: todoPutRequest = { title: 'Todo 1' };
-
 class TodoApi {
   static async getTodos() {
     const response = await fetch('http://localhost:3000/todo');
     const data = await response.json();
-    console.log('response', response.status);
-    console.log('data', data);
 
-    return data;
+    return [data, response.status];
   }
 
-  static async addNewTodo(todo: any): Promise<any> {
+  static async getTodoById(id: number) {
+    const response = await fetch(`http://localhost:3000/todo/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+    });
+    const data = await response.json();
+
+    return [data, response.status];
+  }
+
+  static async createNewTodo(todoTitle: string): Promise<any> {
     fetch('http://localhost:3000/todo', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
-      body: new URLSearchParams(todo).toString(),
-    }).then((res) => {
-      console.log(res.status);
-      return res;
+      body: new URLSearchParams({ title: todoTitle }).toString(),
+    }).then((response) => {
+      return response.status;
+    });
+  }
+
+  static async editTodo(todo: ITodo): Promise<any> {
+    fetch('http://localhost:3000/todo', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(todo),
+    }).then((response) => {
+      return response.status;
     });
   }
 
@@ -39,9 +55,8 @@ class TodoApi {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
-    }).then((res) => {
-      console.log(res.status);
-      return res;
+    }).then((response) => {
+      return response.status;
     });
   }
 }
@@ -89,8 +104,11 @@ const Home: NextPage = () => {
   const [hightestId, setHightestId] = useState<number>(0);
 
   useEffect(() => {
-    TodoApi.addNewTodo(mockTodo);
+    // TodoApi.createNewTodo('Todo 666');
+    // TodoApi.editTodo({ id: 1, title: '13', status: 'Completed' });
     TodoApi.getTodos();
+    // TodoApi.deleteTodo(12);
+    TodoApi.getTodoById(1);
   }, []);
 
   const titleChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
