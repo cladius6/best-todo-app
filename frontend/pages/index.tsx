@@ -69,7 +69,6 @@ const Home: NextPage = () => {
     string | null
   >(null);
   const [editedTask, setEditedTask] = useState<ITodo | null>(null);
-  const [hightestId, setHightestId] = useState<number>(0);
   const [_todoApiResponse, setTodoApiResponse] = useState<number | null>(null);
 
   useEffect(() => {
@@ -102,33 +101,6 @@ const Home: NextPage = () => {
     });
 
     setEnteredTitleNewTask('');
-  };
-
-  const addTask = (
-    newTaskTitle: string,
-    isCompleted: StatusType = StatusType.Active
-  ) => {
-    let newId = hightestId + 1;
-
-    if (tasksList !== null && tasksList.length > 0) {
-      setTasksList([
-        ...tasksList,
-        {
-          id: newId,
-          title: newTaskTitle,
-          status: isCompleted,
-        },
-      ]);
-    } else {
-      setTasksList([
-        {
-          id: newId,
-          title: newTaskTitle,
-          status: isCompleted,
-        },
-      ]);
-    }
-    setHightestId((previousHightestId) => previousHightestId + 1);
   };
 
   const editTaskInTasksList = (
