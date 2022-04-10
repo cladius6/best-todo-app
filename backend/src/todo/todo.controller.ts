@@ -31,7 +31,7 @@ export class TodoController {
     return this.todoService.findAllByStatus(StatusType.Completed);
   }
 
-  @Get('uncompleted')
+  @Get('active')
   getAllUncompleted() {
     return this.todoService.findAllByStatus(StatusType.Active)
   }
