@@ -1,16 +1,31 @@
 import { ITasksList, ITodo, TasksType, StatusType } from '../Interfaces/ITodo';
 import { IApi, IGetTasksListResponse } from './../Interfaces/IApi';
 import type { NextPage } from 'next';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
-fetch('/api/add', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ number_one: 1, number_two: 'two' }),
-});
+async function getTodos() {
+  const response = await fetch('http://localhost:3000/todo');
+  const data = await response.json();
+  console.log('response', response);
+  console.log('data', data);
+
+  return data;
+}
+
+const PUTRequest = { title: 'test1' };
+
+async function putTodo(): Promise<any> {
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+    body: PUTRequest.title,
+  };
+
+  await fetch('http://localhost:3000/todo', options);
+}
 
 const exampleResponse: IGetTasksListResponse = {
   tasksList: [
@@ -53,6 +68,11 @@ const Home: NextPage = () => {
   >(null);
   const [editedTask, setEditedTask] = useState<ITodo | null>(null);
   const [hightestId, setHightestId] = useState<number>(0);
+
+  useEffect(() => {
+    putTodo();
+    getTodos();
+  }, [editedTask]);
 
   const titleChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setEnteredTitleNewTask(event.target.value);
