@@ -97,4 +97,8 @@ describe('TodoService', () => {
       },
     ])
   })
+
+  it('should throw an error when trying to get a todo item by id that does not exist', () => {
+    expect(() => todo.getOne(1)).toThrowError('Todo not found');
+  });
 });

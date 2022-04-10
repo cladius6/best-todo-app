@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { ITodo } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
@@ -23,7 +23,11 @@ export class TodoController {
 
   @Get(':id')
   getOne(@Param('id') id: number) {
-    return this.todoService.getTodo().getOne(Number(id));
+    try {
+      return this.todoService.getTodo().getOne(Number(id));
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Put('')

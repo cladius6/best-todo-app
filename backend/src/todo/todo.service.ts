@@ -43,7 +43,12 @@ export class TodoListSingleton {
   }
 
   getOne(id: number): ITodo {
-    return this.todos.find((todo) => todo.id === id);
+    const result = this.todos.find((todo) => todo.id === id);
+    if (result) {
+      return result;
+    } else {
+      throw new Error('Todo not found');
+    }
   }
 
   update(todo: ITodo) {
