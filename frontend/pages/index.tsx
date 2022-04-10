@@ -1,5 +1,4 @@
 import { ITasksList, ITodo, TasksType, StatusType } from '../Interfaces/ITodo';
-import { IApi, IGetTasksListResponse } from './../Interfaces/IApi';
 import type { NextPage } from 'next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
