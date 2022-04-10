@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AddTodoDto } from './dto/add-todo.dto';
 import { ITodo } from './interfaces/todo';
 import { TodoService } from './todo.service';
 
@@ -31,7 +32,8 @@ export class TodoController {
   }
 
   @Put('')
-  add(@Body() todo) {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  add(@Body() todo: AddTodoDto) {
     return this.todoService.getTodo().add(todo);
   }
 
