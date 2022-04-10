@@ -21,9 +21,13 @@ export class TodoController {
   constructor(private todoService: TodoService) {}
 
   @Get('')
-  getAll() {
-    return this.todoService.getTodo().getAll();
+  async getAll() {
+    // return this.todoService.getTodo().getAll();
+    const result = await this.todoService.findAll();
+    if (result.length === 0) return [];
+    return result;
   }
+
 
   @Get('completed')
   getAllCompleted() {
@@ -36,9 +40,10 @@ export class TodoController {
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: number) {
+  async getOne(@Param('id', ParseIntPipe) id: number) {
     try {
-      return this.todoService.getTodo().getOne(id);
+      // return this.todoService.getTodo().getOne(id);
+      return await this.todoService.findOne(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
