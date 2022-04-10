@@ -1,6 +1,7 @@
 
 .idea
-
+.env.development
+database/data
 
 # dependencies
 frontend/node_modules
