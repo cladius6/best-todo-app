@@ -34,6 +34,10 @@ export class TodoListSingleton {
     return this.todos;
   }
 
+  getAllCompleted(): ITodo[] {
+    return this.todos.filter((todo) => todo.status == StatusType.Completed);
+  }
+
   getOne(id: number): ITodo {
     return this.todos.find((todo) => todo.id === id);
   }

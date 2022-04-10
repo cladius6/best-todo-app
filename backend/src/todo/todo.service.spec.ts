@@ -58,4 +58,24 @@ describe('TodoService', () => {
       status: StatusType.Completed,
     });
   });
+
+  it('should return all completed todo items', () => {
+    todo.add({ title: 'test'});
+    todo.update({ id: 1, title: 'test2', status: StatusType.Completed });
+    todo.add({ title: 'test2'});
+    todo.update({ id: 2, title: 'test3', status: StatusType.Completed });
+    todo.add({ title: 'test3' });
+    expect(todo.getAllCompleted()).toEqual([
+      {
+        id: 1,
+        title: 'test2',
+        status: StatusType.Completed,
+      },
+      {
+        id: 2,
+        title: 'test3',
+        status: StatusType.Completed,
+      },
+    ])
+  });
 });
