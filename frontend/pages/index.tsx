@@ -278,6 +278,7 @@ const Home: NextPage = () => {
                       setTasksList(
                         deleteTaskInTasksList(tasksList, tasksList[index])
                       );
+                      TodoApi.deleteTodo(tasksList[index].id);
                     }}
                   >
                     delete
